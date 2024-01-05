@@ -36,7 +36,32 @@ func targetMatchs(text string) bool {
   return false
 }
 
-func sendTgMessage(text string) {
+func sendMessageToTgChannel(tgBotToken string, tgChannelName string, message string) error {
+  encodedMsg := url.QueryEscape(message)
+  url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s", tgBotToken, tgChannelName, encodedMsg)
+  err := HttpGet(url)
+  if err != nil {
+    return err
+  }
 
+  return nil
+}
+
+func HttpGet(url string) error {
+	res, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+
+	if !(res.StatusCode == http.StatusOK || res.StatusCode == http.StatusAccepted) {
+		resBody, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return errors.New(fmt.Sprintf("Unsuccessful %d http response. Cannot read response body.\n", res.StatusCode))
+		}
+
+		return errors.New(fmt.Sprintf("Unsuccessful %d http response.\n%s", res.StatusCode, resBody))
+	}
+
+	return nil
 }
 
