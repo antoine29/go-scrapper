@@ -47,6 +47,7 @@ func main() {
   if err := collector.Visit("https://thor.organojudicial.gob.bo/"); err != nil {
     errorMessage := fmt.Sprintf("Error scrapping. \n %s", err.Error())
     slog.Error(errorMessage)
+    sendMessageToTgChannel(tgToken, tgChannelName, errorMessage)
     os.Exit(1)
   }
 
