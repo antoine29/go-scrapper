@@ -1,0 +1,21 @@
+name: "Cron Job"
+on:
+  schedule:
+    - cron: '0 0,6,12,18,22 * * *'  # at 0 and 12 every day
+    # - cron: '*/3 * * * *'   # at every three minutes
+  workflow_dispatch:
+
+jobs:
+  run-exe:
+    name: "Runs exe"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Runs exe
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHANNEL_NAME: ${{ vars.TG_CHANNEL_NAME }}
+          TARGETS: ${{ vars.TARGETS }}
+        run: ./exe
+
