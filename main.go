@@ -38,7 +38,7 @@ func main() {
 	collector.OnHTML("p", func(element *colly.HTMLElement) {
 		// fmt.Printf("%+v\n", e)
 		text := strings.ToLower(element.Text)
-		if targetMatchs(text) {
+		if targetMatchs(&targets, &text) {
       slog.Info(fmt.Sprintf("Found: \n %s", text))
       sendMessageToTgChannel(tgToken, tgChannelName, text)
 		} 
@@ -53,9 +53,9 @@ func main() {
   slog.Info("Scrapping finished")
 }
 
-func targetMatchs(text string) bool {
-	for _, targuet := range targets {
-		if strings.Contains(text, targuet) {
+func targetMatchs(targets *[]string, text *string) bool {
+	for _, targuet := range *targets {
+		if strings.Contains(*text, targuet) {
 			return true
 		}
 	}
