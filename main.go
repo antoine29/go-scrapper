@@ -14,18 +14,13 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-var targets []string = []string{
-	"2010990022392",
-	"20386975",
-	"203.9",
-}
-
 var tgToken, tgTokenIsSet = os.LookupEnv("TG_TOKEN")
 var tgChannelName, tgChannelNameIsSet = os.LookupEnv("TG_CHANNEL_NAME")
+var targets, targetsAreSet = os.LookupEnv("TARGETS")
 
 func main() {
-  if !tgTokenIsSet || !tgChannelNameIsSet {
-    slog.Error("TG env vars not set")
+  if !tgTokenIsSet || !tgChannelNameIsSet || !targetsAreSet {
+    slog.Error("env vars not set")
     os.Exit(1)
   }
   
@@ -35,6 +30,8 @@ func main() {
   //   tgChannelName, 
   //   fmt.Sprintf("Scrapping started at: %s", time.Now()),
   // )
+
+  targets := strings.Split(targets, ",")
 
 	collector := colly.NewCollector()
   collector.SetRequestTimeout(5 * time.Minute)
