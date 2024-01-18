@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -37,8 +36,9 @@ func main() {
   //   fmt.Sprintf("Scrapping started at: %s", time.Now()),
   // )
 
-	c := colly.NewCollector()
-	c.OnHTML("p", func(element *colly.HTMLElement) {
+	collector := colly.NewCollector()
+  collector.SetRequestTimeout(5 * time.Minute)
+	collector.OnHTML("p", func(element *colly.HTMLElement) {
 		// fmt.Printf("%+v\n", e)
 		text := strings.ToLower(element.Text)
 		if targetMatchs(text) {
@@ -47,9 +47,10 @@ func main() {
 		} 
 	})
 
-  if err := c.Visit("https://thor.organojudicial.gob.bo/"); err != nil {
+  if err := collector.Visit("https://thor.organojudicial.gob.bo/"); err != nil {
     errorMessage := fmt.Sprintf("Error scrapping. \n %s", err.Error())
     slog.Error(errorMessage)
+    os.Exit(1)
   }
 
   slog.Info("Scrapping finished")
