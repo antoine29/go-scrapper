@@ -1,7 +1,8 @@
 name: "Cron Job"
 on:
   schedule:
-    - cron: '0 0,6,12,18,22 * * *'  # at 0 and 12 every day
+    - cron: '0 0 5 31 2 ?'
+    # - cron: '0 0,6,12,18,22 * * *'  # at 0 and 12 every day
     # - cron: '*/3 * * * *'   # at every three minutes
   workflow_dispatch:
 
